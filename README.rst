@@ -1,0 +1,1 @@
+Python wrapper around Linux CLI "convert" which works as an entrypoint around the Linux image processing 'ImageMagick'
