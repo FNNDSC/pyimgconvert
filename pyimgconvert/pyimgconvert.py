@@ -32,16 +32,20 @@ class pyimgconvert(object):
                                             )
 
          # Directory and filenames
-        str_inputDir                   = ''
-        str_outputDir                  = ''
-        str_args                       = ''
-        
+        self.str_inputDir                   = ''
+        self.str_outputDir                  = ''
+        self.str_args                       = ''
+        self.str_inputFile                  = ''
+        self.str_outputFile                 = ''
+                
         for key, value in kwargs.items():
            if key == "inputDir":              self.str_inputDir              = value
            if key == "outputDir":             self.str_outputDir             = value
-           if key == "args":                  self.args                      = value
+           if key == "args":                  self.str_args                  = value
+           if key == "inputFile":             self.str_inputFile             = value
+           if key == "outputFile":            self.str_outputFile            = value
 
-    def job_run(self, str_cmd, options):
+    def job_run(self, str_cmd):
         """
         Running some CLI process via python is cumbersome. The typical/easy
         path of
@@ -75,23 +79,23 @@ class pyimgconvert(object):
                 break
             if stdout:
                 str_stdoutLine = stdout.decode()
-                if int(options.verbosity):
+                if int(self.verbosity):
                     print(str_stdoutLine, end = '')
                 str_stdout      += str_stdoutLine
         d_ret['stdout']     = str_stdout
         d_ret['stderr']     = p.stderr.read().decode()
         d_ret['returncode'] = p.returncode
-        if int(options.verbosity):
+        if int(self.verbosity):
             print('\nstderr: \n%s' % d_ret['stderr'])
         return d_ret
 
-    def job_stdwrite(self, d_job, options):
+    def job_stdwrite(self, d_job):
         """
         Capture the d_job entries to respective files.
         """
         for key in d_job.keys():
             with open(
-                 '%s/%s-%s' % (options.outputDir, options.outputFile, key), "w"
+                 '%s/%s-%s' % (self.str_outputDir, self.str_outputFile, key), "w"
             ) as f:
                 f.write(str(d_job[key]))
                 f.close()
@@ -106,18 +110,18 @@ class pyimgconvert(object):
 
         str_cmd     = ""
 
-        l_appargs = options.args.split('ARGS:')
+        l_appargs = self.str_args.split('ARGS:')
         if len(l_appargs) == 2:
-            str_args = l_appargs[1]
+            self.str_args = l_appargs[1]
         else:
-            str_args = l_appargs[0]
+            self.str_args = l_appargs[0]
 
-        os.chdir(options.outputDir)
-        str_cmd = "convert %s/%s %s/%s %s" % (options.inputDir, options.inputFile, 
-                options.outputDir, options.outputFile, str_args)
+        os.chdir(self.str_outputDir)
+        str_cmd = "convert %s/%s %s %s/%s" % (self.str_inputDir, self.str_inputFile, 
+                self.str_args, self.str_outputDir, self.str_outputFile)
 
         # Run the job and provide realtime stdout
         # and post-run stderr
         self.job_stdwrite(
-            self.job_run(str_cmd, options), options
+            self.job_run(str_cmd)
         )
