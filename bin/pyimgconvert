@@ -7,14 +7,20 @@
 #                        dev@babyMRI.org
 #
 
-import os
-import sys
-import subprocess
-import pudb
+import  os
+import  sys
+
+sys.path.insert(1, os.path.join(os.path.dirname(__file__), '..'))
+
+import  subprocess
+import  pudb
 from    argparse            import RawTextHelpFormatter
 from    argparse            import ArgumentParser
+from    pfmisc._colors      import Colors
+from    pyimgconvert        import pyimgconvert
 
-sys.path.append(os.path.dirname(__file__))
+# sys.path.append(os.path.dirname(__file__))
+
 
 str_version = "1.0.0"
 str_desc = Colors.CYAN + """
@@ -63,10 +69,17 @@ def synopsis(ab_shortOnly = False):
     ARGS
 
         [-I|--inputDir <inputDir>]  
-        Input directory that contains the image files to convert   
+        Input directory that contains the image files to convert 
+
+        [-i|--inputFile <inputFile>]
+        Input file within the inputDir that needs to be converted  
 
         [-O|--outputDir <outputDir>]                            
         Output Directory that will store the required output  
+
+        [-o|--outputFile <outputFile>]
+        Name of the outputFile that should be used to store the resultant
+        output in the outputDir
 
         [-a|--args <convertArgsToPass>]
         Arguments that are upposed to be passed to the "magick convert"
@@ -98,10 +111,16 @@ parser  = ArgumentParser(description = str_desc, formatter_class = RawTextHelpFo
 parser.add_argument("-I", "--inputDir",
                     help    = "input dir",
                     dest    = 'inputDir')
+parser.add_argument("-i", "--inputFile",
+                    help    = "input file",
+                    dest    = 'inputFile')
 parser.add_argument("-O", "--outputDir",
                     help    = "output image directory",
                     dest    = 'outputDir',
                     default = '')
+parser.add_argument("-o", "--outputFile",
+                    help    = "output file",
+                    dest    = 'outputFile')
 parser.add_argument("-a", "--args",
                     help    = "args to be passed to magick convert",
                     dest    = "args",
@@ -143,7 +162,9 @@ if args.b_version:
 
 pyimgconvert = pyimgconvert.pyimgconvert(
     inputDir        = args.inputDir,
+    inputFile       = args.inputFile,
     outputDir       = args.outputDir,
+    outputFile      = args.outputFile,
     args            = args.args,
     man             = args.man,
     synopsis        = args.synopsis,
@@ -153,6 +174,6 @@ pyimgconvert = pyimgconvert.pyimgconvert(
 
 
 
-returnType_pyimgconvert = pyimgconvert.img_convert()
+returnType_pyimgconvert = pyimgconvert.img_convert(args)
 
 sys.exit(0)

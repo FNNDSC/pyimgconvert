@@ -9,8 +9,9 @@ from        pfmisc              import  other
 from        pfmisc              import  error
 import argparse
 import pudb
+import subprocess
 
-class pyimgcovert(object):
+class pyimgconvert(object):
     """
         A class based on "magick convert" that accepts CLI arguments that need to be passed 
         to the Linux CLI utility to convert images to required outputs.
@@ -31,13 +32,92 @@ class pyimgcovert(object):
                                             )
 
          # Directory and filenames
-         str_inputDir                   = ''
-         str_outputDir                  = ''
-         str_args                       = ''
+        str_inputDir                   = ''
+        str_outputDir                  = ''
+        str_args                       = ''
         
-         for key, value in kwargs.items():
-            if key == "inputDir":              self.str_inputDir              = value
-            if key == "outputDir":             self.str_outputDir             = value
-            if key == "args":                  self.args                      = value
+        for key, value in kwargs.items():
+           if key == "inputDir":              self.str_inputDir              = value
+           if key == "outputDir":             self.str_outputDir             = value
+           if key == "args":                  self.args                      = value
 
-        def img_convert(self):
+    def job_run(self, str_cmd, options):
+        """
+        Running some CLI process via python is cumbersome. The typical/easy
+        path of
+                            os.system(str_cmd)
+        is deprecated and prone to hidden complexity. The preferred
+        method is via subprocess, which has a cumbersome processing
+        syntax. Still, this method runs the `str_cmd` and returns the
+        stderr and stdout strings as well as a returncode.
+        Providing readtime output of both stdout and stderr seems
+        problematic. The approach here is to provide realtime
+        output on stdout and only provide stderr on process completion.
+        """
+        d_ret = {
+            'stdout':       "",
+            'stderr':       "",
+            'returncode':   0
+        }
+
+        p = subprocess.Popen(
+                    str_cmd.split(),
+                    stdout      = subprocess.PIPE,
+                    stderr      = subprocess.PIPE,
+        )
+
+        # Realtime output on stdout
+        str_stdoutLine  = ""
+        str_stdout      = ""
+        while True:
+            stdout      = p.stdout.readline()
+            if p.poll() is not None:
+                break
+            if stdout:
+                str_stdoutLine = stdout.decode()
+                if int(options.verbosity):
+                    print(str_stdoutLine, end = '')
+                str_stdout      += str_stdoutLine
+        d_ret['stdout']     = str_stdout
+        d_ret['stderr']     = p.stderr.read().decode()
+        d_ret['returncode'] = p.returncode
+        if int(options.verbosity):
+            print('\nstderr: \n%s' % d_ret['stderr'])
+        return d_ret
+
+    def job_stdwrite(self, d_job, options):
+        """
+        Capture the d_job entries to respective files.
+        """
+        for key in d_job.keys():
+            with open(
+                 '%s/%s-%s' % (options.outputDir, options.outputFile, key), "w"
+            ) as f:
+                f.write(str(d_job[key]))
+                f.close()
+        return {
+            'status': True
+        }
+
+    def img_convert(self, options):
+        """
+        Define the code to be run by this python app.
+        """
+
+        str_cmd     = ""
+
+        l_appargs = options.args.split('ARGS:')
+        if len(l_appargs) == 2:
+            str_args = l_appargs[1]
+        else:
+            str_args = l_appargs[0]
+
+        os.chdir(options.outputDir)
+        str_cmd = "convert %s/%s %s/%s %s" % (options.inputDir, options.inputFile, 
+                options.outputDir, options.outputFile, str_args)
+
+        # Run the job and provide realtime stdout
+        # and post-run stderr
+        self.job_stdwrite(
+            self.job_run(str_cmd, options), options
+        )
