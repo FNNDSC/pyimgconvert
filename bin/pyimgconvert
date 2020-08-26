@@ -97,7 +97,12 @@ def synopsis(ab_shortOnly = False):
         Set the app verbosity level. 
     
     EXAMPLES:
-    #wip
+    
+    pyimgconvert 
+        --inputDir <inputDir>               \\
+        --inputFile image.jpg               \\
+        --outputDir <outputDir>             \\
+        --outputFile image.png              \\
 
     '''
     if ab_shortOnly:

@@ -24,7 +24,7 @@ class pyimgconvert(object):
 
         self.str_desc                   = ''
         self.__name__                   = "pyimgconvert"
-        self.str_version                = "1.0.0"
+        self.str_version                = "1.0.2"
         self.verbosity                  = 1
         self.dp                         = pfmisc.debug(
                                             verbosity   = self.verbosity,
