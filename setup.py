@@ -12,14 +12,14 @@ def readme():
 
 setup(
       name             =   'pyimgconvert',
-      version          =   '1.0.3',
+      version          =   '1.0.4',
       description      =   '(Python) utility which acts as a wrapper around the Linux CLI: convert',
       long_description =   readme(),
       author           =   'FNNDSC',
       author_email     =   'dev@babymri.org',
       url              =   'https://github.com/FNNDSC/pyimgconvert',
       packages         =   ['pyimgconvert'],
-      install_requires =   ['pudb', 'subprocess'],
+      install_requires =   ['pudb'],
       #test_suite       =   'nose.collector',
       #tests_require    =   ['nose'],
       scripts          =   ['bin/pyimgconvert'],

@@ -1,4 +1,4 @@
-pyimgconvert 1.0.3
+pyimgconvert 1.0.4
 ==================
 
 Quick Overview
