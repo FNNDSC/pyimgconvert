@@ -103,7 +103,7 @@ class pyimgconvert(object):
             'status': True
         }
 
-    def img_convert(self, options):
+    def img_convert(self):
         """
         Define the code to be run by this python app.
         """
@@ -124,4 +124,40 @@ class pyimgconvert(object):
         # and post-run stderr
         self.job_stdwrite(
             self.job_run(str_cmd)
+        )
+
+class object_factoryCreate:
+    """
+    A class that examines input file string for extension information and
+    returns the relevant convert object.
+    """
+
+    def __init__(self, args):
+        """
+        Parse relevant CLI args.
+        """
+        # str_outputFileStem, str_outputFileExtension = os.path.splitext(args.outputFileStem)
+        # if len(str_outputFileExtension):
+        #     str_outputFileExtension = str_outputFileExtension.split('.')[1]
+        # # try:
+        # #     str_inputFileStem, str_inputFileExtension = os.path.splitext(args.inputFile)
+        # # except:
+        # #     sys.exit(1)
+
+        # if not len(args.outputFileType) and len(str_outputFileExtension):
+        #     args.outputFileType = str_outputFileExtension
+
+        # if len(str_outputFileExtension):
+        #     args.outputFileStem = str_outputFileStem
+
+        self.C_convert = pyimgconvert(
+            inputFile            = args.inputFile,
+            inputDir             = args.inputDir,
+            outputDir            = args.outputDir,
+            outputFile           = args.outputFile,
+            args                 = args.args,
+            man                  = args.man,
+            synopsis             = args.synopsis,
+            verbosity            = args.verbosity,
+            version              = args.version
         )
