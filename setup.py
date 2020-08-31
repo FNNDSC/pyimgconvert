@@ -12,7 +12,7 @@ def readme():
 
 setup(
       name             =   'pyimgconvert',
-      version          =   '1.0.8',
+      version          =   '1.0.10',
       description      =   '(Python) utility which acts as a wrapper around the Linux CLI: convert',
       long_description =   readme(),
       author           =   'FNNDSC',

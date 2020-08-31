@@ -22,7 +22,7 @@ from    pyimgconvert        import pyimgconvert
 # sys.path.append(os.path.dirname(__file__))
 
 
-str_version = "1.0.8"
+str_version = "1.0.10"
 str_desc = Colors.CYAN + """
 
              _                                               _   
