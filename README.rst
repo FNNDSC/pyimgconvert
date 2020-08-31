@@ -33,7 +33,7 @@ One method of installing this script and all of its dependencies is by fetching 
 Docker container
 ~~~~~~~~~~~~~~~~
 
-We also offer a docker container of ``pyimgconvert`` as a ChRIS-conformant platform plugin here https://github.com/FNNDSC/pl-pyimageconvert -- please consult that page for information on running the dockerized container. The containerized version exposes a similar CLI and functionality as this module.
+We also offer a docker container of ``pyimgconvert`` as a ChRIS-conformant platform plugin here https://github.com/FNNDSC/pl-imageconvert -- please consult that page for information on running the dockerized container. The containerized version exposes a similar CLI and functionality as this module.
 
 How to Use
 ----------
