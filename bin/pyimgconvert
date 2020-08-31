@@ -54,6 +54,8 @@ def synopsis(ab_shortOnly = False):
             pyimgconvert                                                \\
                 [-I|--inputDir <inputDir>]                                  \\
                 [-O|--outputDir <outputDir>]                                \\
+                [-i|--inputFile <inputFile>]                                \\
+                [-o|--outputFile <outputFile>]                              \\
                 [-a|--args <convertArgsToPass>]                             \\
                 [-x|--man]                                                  \\
                 [-y|--synopsis]                                             \\
